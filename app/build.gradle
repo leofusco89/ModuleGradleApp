@@ -1,0 +1,75 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+}
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        applicationId "com.example.modulegradleapp"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        debug {
+            //Indicamos que en modo debug, se puede debuggear
+            debuggable true
+            //Habilitamos botón para admin
+            buildConfigField "boolean", "SHOW_ADMIN_BUTTON", "true"
+        }
+        release {
+            //Indicamos que en modo release, se puede debuggear
+            debuggable false
+            //Inhabilitamos botón para admin
+            buildConfigField "boolean", "SHOW_ADMIN_BUTTON", "false"
+
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    flavorDimensions "version"
+    productFlavors {
+        //Entorno desarrollo
+        dev {
+            dimension "version"
+            applicationId = "com.example.modulegradleapp.dev"
+            //Al instalar la APK, en caso que instalemos la versión de DEV, le agregamos
+            //un sufijo para identificarla:
+            versionNameSuffix '-DEV'
+        }
+
+        //Entorno producción
+        prod {
+            dimension "version"
+            applicationId = "com.example.modulegradleapp"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation "androidx.test.ext:junit:$rootProject.ext.androidTestImplementation"
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+}
